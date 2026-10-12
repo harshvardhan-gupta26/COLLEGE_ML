@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LoginPage from './components/LoginPage';
 import Navbar from './components/Navbar';
 import HomeTab from './components/HomeTab';
 import PredictTab from './components/PredictTab';
@@ -22,12 +23,24 @@ const DEFAULT_INPUTS = {
 };
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser]             = useState('');
   const [activeTab, setActiveTab] = useState('home');
   const [formData, setFormData] = useState(DEFAULT_INPUTS);
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [history, setHistory] = useState([]);
+
+  const handleLogin = (username) => {
+    setUser(username);
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUser('');
+  };
 
   // Auto-run initial prediction once so the dashboard has sample data on first load
   useEffect(() => {
@@ -152,9 +165,18 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
   return (
     <div className="site-wrapper">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        user={user}
+        onLogout={handleLogout}
+      />
 
       <main className="content-container">
         {error && (

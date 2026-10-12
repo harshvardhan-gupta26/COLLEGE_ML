@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function Navbar({ activeTab, setActiveTab }) {
+export default function Navbar({ activeTab, setActiveTab, user, onLogout }) {
   return (
     <nav className="navbar">
       <div className="nav-container">
         <div className="nav-brand" onClick={() => setActiveTab('home')}>
-          <span className="brand-icon">🛰️</span>
+          <span className="brand-icon">SAT</span>
           <div>
             <span className="brand-title">SatLink AI</span>
             <span className="brand-tag">B.Tech Project</span>
@@ -49,6 +49,25 @@ export default function Navbar({ activeTab, setActiveTab }) {
             About Project
           </button>
         </div>
+
+        {user && (
+          <div className="nav-user-wrapper">
+            <div className="nav-user-badge">
+              <span className="nav-user-dot"></span>
+              <span className="nav-user-name">{user}</span>
+            </div>
+            {onLogout && (
+              <button
+                type="button"
+                className="nav-logout-btn"
+                onClick={onLogout}
+                title="Sign out of demo session"
+              >
+                Sign Out
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );
